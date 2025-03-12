@@ -4,13 +4,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import is.hbv501g.lootapp.adapter.InventoryAdapter;
+import is.hbv501g.lootapp.api.ApiClient;
+import is.hbv501g.lootapp.models.InventoryCard;
+import is.hbv501g.lootapp.models.api.InventoryResponse;
+import retrofit2.Call;
+import retrofit2.Response;
 
 //InventoryActivity.java
 public class InventoryActivity extends AppCompatActivity {
 
-    private Button buttonHome;
-    private RecyclerView recyclerViewInventory;
     private InventoryAdapter inventoryAdapter;
     private List<InventoryCard> inventoryList;
     private ProgressBar progressBar;
@@ -20,8 +33,8 @@ public class InventoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
 
-        buttonHome = findViewById(R.id.buttonHome);
-        recyclerViewInventory = findViewById(R.id.recyclerViewInventory);
+        Button buttonHome = findViewById(R.id.buttonHome);
+        RecyclerView recyclerViewInventory = findViewById(R.id.recyclerViewInventory);
         progressBar = findViewById(R.id.progressBar);
 
         // Set up RecyclerView

@@ -1,6 +1,10 @@
 package is.hbv501g.lootapp.api;
 
-// ApiService.java in new package: is.hbv501g.lootapp.api
+import is.hbv501g.lootapp.models.Card;
+import is.hbv501g.lootapp.models.api.*;
+import retrofit2.Call;
+import retrofit2.http.*;
+
 public interface ApiService {
     // Authentication
     @POST("users/login")
@@ -22,6 +26,4 @@ public interface ApiService {
 
     @POST("cards/add_card_to_inventory")
     Call<AddCardResponse> addCardToInventory(@Body AddCardRequest request);
-
-    // More endpoints as needed...
 }

@@ -1,5 +1,8 @@
 package is.hbv501g.lootapp.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 // SessionManager.java
 public class SessionManager {
     private static final String PREF_NAME = "MagicInventoryPrefs";

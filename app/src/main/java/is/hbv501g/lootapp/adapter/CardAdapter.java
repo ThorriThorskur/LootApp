@@ -1,5 +1,23 @@
 package is.hbv501g.lootapp.adapter;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+
+import java.util.List;
+
+import is.hbv501g.lootapp.R;
+import is.hbv501g.lootapp.models.Card;
+
 // CardAdapter.java
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
 

@@ -2,13 +2,28 @@ package is.hbv501g.lootapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.IOException;
+
+import is.hbv501g.lootapp.api.ApiClient;
+import is.hbv501g.lootapp.models.api.LoginRequest;
+import is.hbv501g.lootapp.models.api.LoginResponse;
+import is.hbv501g.lootapp.util.SessionManager;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Button buttonLogin, buttonRegister;
     private EditText editTextUsername, editTextPassword;
     private ProgressBar progressBar;
     private SessionManager sessionManager;
@@ -29,8 +44,8 @@ public class LoginActivity extends AppCompatActivity {
 
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPassword);
-        buttonLogin = findViewById(R.id.buttonLogin);
-        buttonRegister = findViewById(R.id.buttonRegister);
+        Button buttonLogin = findViewById(R.id.buttonLogin);
+        Button buttonRegister = findViewById(R.id.buttonRegister);
         progressBar = findViewById(R.id.progressBar);
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {

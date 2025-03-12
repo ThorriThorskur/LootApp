@@ -1,5 +1,11 @@
 package is.hbv501g.lootapp.api;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 // ApiClient.java
 public class ApiClient {
     private static final String BASE_URL = "https://vefthjonusta-magicgathering-db.vercel.app/api";

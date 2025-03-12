@@ -4,7 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import is.hbv501g.lootapp.adapter.CardAdapter;
+import is.hbv501g.lootapp.models.Card;
 
 
 public class SearchActivity extends AppCompatActivity {
