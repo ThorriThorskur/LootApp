@@ -9,18 +9,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class DashboardActivity extends AppCompatActivity {
 
-    private ImageButton buttonHome;  // Change type to ImageButton
-    private Button buttonSearch, buttonInventory, buttonScanner;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        buttonHome = findViewById(R.id.buttonHome);  // This now returns an ImageButton
-        buttonSearch = findViewById(R.id.buttonSearch);
-        buttonInventory = findViewById(R.id.buttonInventory);
-        buttonScanner = findViewById(R.id.buttonScanner);
+        // Change type to ImageButton
+        ImageButton buttonHome = findViewById(R.id.buttonHome);  // This now returns an ImageButton
+        Button buttonSearch = findViewById(R.id.buttonSearch);
+        Button buttonInventory = findViewById(R.id.buttonInventory);
+        Button buttonScanner = findViewById(R.id.buttonScanner);
 
         // Home button: since this is the dashboard, you might refresh or do nothing.
         buttonHome.setOnClickListener(new View.OnClickListener() {
