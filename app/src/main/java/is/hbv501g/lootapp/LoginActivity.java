@@ -46,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         Button buttonLogin = findViewById(R.id.buttonLogin);
         Button buttonRegister = findViewById(R.id.buttonRegister);
-        progressBar = findViewById(R.id.progressBar);
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,17 +84,21 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
 
-                    // Save auth token and user info
                     sessionManager.saveAuthToken(loginResponse.getToken());
-                    sessionManager.saveUserDetails(
-                            loginResponse.getUser().getId(),
-                            loginResponse.getUser().getUsername()
-                    );
 
-                    // Navigate to Dashboard
-                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if (loginResponse.getUser() != null) {
+                        sessionManager.saveUserDetails(
+                                loginResponse.getUser().getId(),
+                                loginResponse.getUser().getUsername()
+                        );
+
+                        // Navigate to Dashboard if user data exists
+                        Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Login failed: user data is missing", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     try {
                         String errorBody = response.errorBody().string();

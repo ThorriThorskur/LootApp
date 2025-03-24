@@ -1,5 +1,7 @@
 package is.hbv501g.lootapp.models;
 
+import java.util.List;
+
 // Deck.java
 public class Deck {
     private int id;

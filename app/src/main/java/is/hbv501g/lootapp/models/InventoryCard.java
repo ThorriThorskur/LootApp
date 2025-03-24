@@ -10,4 +10,19 @@ public class InventoryCard {
     private Card card;
 
     // Getters and setters
+
+    public Card getCard() {
+        return card;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    //constructor
+    public InventoryCard(Card card, int quantity) {
+        this.card = card;
+        this.quantity = quantity;
+    }
+
 }

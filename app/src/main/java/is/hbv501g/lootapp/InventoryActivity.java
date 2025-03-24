@@ -19,6 +19,7 @@ import is.hbv501g.lootapp.api.ApiClient;
 import is.hbv501g.lootapp.models.InventoryCard;
 import is.hbv501g.lootapp.models.api.InventoryResponse;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 //InventoryActivity.java

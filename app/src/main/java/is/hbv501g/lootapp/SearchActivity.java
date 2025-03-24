@@ -2,10 +2,12 @@ package is.hbv501g.lootapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import is.hbv501g.lootapp.adapter.CardAdapter;
+import is.hbv501g.lootapp.api.ApiClient;
 import is.hbv501g.lootapp.models.Card;
+import is.hbv501g.lootapp.models.api.SearchResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SearchActivity extends AppCompatActivity {
@@ -37,7 +44,6 @@ public class SearchActivity extends AppCompatActivity {
         editTextSearch = findViewById(R.id.editTextSearch);
         buttonSearch = findViewById(R.id.buttonSearch);
         recyclerViewCards = findViewById(R.id.recyclerViewCards);
-        progressBar = findViewById(R.id.progressBar);
 
         // Set up RecyclerView
         cardList = new ArrayList<>();
