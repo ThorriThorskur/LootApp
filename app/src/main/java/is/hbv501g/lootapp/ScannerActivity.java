@@ -4,11 +4,16 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
 import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,8 +26,10 @@ import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.common.InputImage;
@@ -30,18 +37,10 @@ import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.graphics.Matrix;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
-import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
 
 public class ScannerActivity extends AppCompatActivity {
 
@@ -54,6 +53,13 @@ public class ScannerActivity extends AppCompatActivity {
     // The overlay that defines the scan area.
     private View scanAreaOverlay;
 
+    // Popup UI elements
+    private ImageButton buttonList;
+    private CardView popupScanList;
+    private ImageButton buttonClosePopup;
+    private RecyclerView recyclerScanList;
+    private Button buttonDeleteAll, buttonAddAll;
+
     private Executor cameraExecutor;
     private volatile boolean scanningEnabled = false; // Flag for single scan trigger
 
@@ -62,22 +68,52 @@ public class ScannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
 
+        // Main scanner UI elements.
         buttonHome = findViewById(R.id.buttonHome);
         buttonScan = findViewById(R.id.buttonScan);
         previewView = findViewById(R.id.previewView);
         textViewRecognized = findViewById(R.id.textViewRecognized);
         scanAreaOverlay = findViewById(R.id.scanArea); // Your MaterialCardView overlay
 
+        // Popup UI elements.
+        buttonList = findViewById(R.id.buttonList);
+        popupScanList = findViewById(R.id.popupScanList);
+        buttonClosePopup = findViewById(R.id.buttonClosePopup);
+        recyclerScanList = findViewById(R.id.recyclerScanList);
+        buttonDeleteAll = findViewById(R.id.buttonDeleteAll);
+        buttonAddAll = findViewById(R.id.buttonAddAll);
+
+        // Home button listener.
         buttonHome.setOnClickListener(view -> {
             Intent intent = new Intent(ScannerActivity.this, DashboardActivity.class);
             startActivity(intent);
             finish();
         });
 
-        // When the scan button is pressed, enable scanning.
+        // Scan button listener.
         buttonScan.setOnClickListener(view -> {
             scanningEnabled = true;
             Toast.makeText(ScannerActivity.this, "Scanning enabled", Toast.LENGTH_SHORT).show();
+        });
+
+        // List button to show popup.
+        buttonList.setOnClickListener(view -> {
+            popupScanList.setVisibility(View.VISIBLE);
+        });
+
+        // Close popup button.
+        buttonClosePopup.setOnClickListener(view -> {
+            popupScanList.setVisibility(View.GONE);
+        });
+
+        // Dummy Delete All button.
+        buttonDeleteAll.setOnClickListener(view -> {
+            Toast.makeText(ScannerActivity.this, "Delete All clicked (dummy)", Toast.LENGTH_SHORT).show();
+        });
+
+        // Dummy Add All button.
+        buttonAddAll.setOnClickListener(view -> {
+            Toast.makeText(ScannerActivity.this, "Add All clicked (dummy)", Toast.LENGTH_SHORT).show();
         });
 
         // Use the main executor for CameraX tasks.
@@ -118,7 +154,7 @@ public class ScannerActivity extends AppCompatActivity {
         Preview preview = new Preview.Builder().build();
         preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
-        // Set up the ImageAnalysis use case which will run ML Kit on each frame.
+        // Set up the ImageAnalysis use case to process frames.
         ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build();
@@ -198,7 +234,7 @@ public class ScannerActivity extends AppCompatActivity {
                                 Log.e("ScannerActivity", "Text recognition failed: ", e);
                             })
                             .addOnCompleteListener(task -> {
-                                // Reset scanning flag to ensure only one scan occurs per button press.
+                                // Reset scanning flag so only one scan occurs per button press.
                                 scanningEnabled = false;
                                 imageProxy.close();
                             });
@@ -208,7 +244,7 @@ public class ScannerActivity extends AppCompatActivity {
             }
         });
 
-        // Choose the camera (back-facing here).
+        // Choose the camera (back-facing).
         CameraSelector cameraSelector = new CameraSelector.Builder()
                 .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                 .build();
@@ -222,8 +258,7 @@ public class ScannerActivity extends AppCompatActivity {
 
     /**
      * Converts an ImageProxy to a Bitmap.
-     * Note: This method is a placeholder. Converting a YUV ImageProxy to Bitmap requires proper handling.
-     * You might consider using a library method or utility such as YuvToRgbConverter.
+     * Note: This is a basic conversion using YuvImage and may need adjustments.
      */
     private Bitmap imageProxyToBitmap(ImageProxy imageProxy) {
         try {
@@ -265,17 +300,16 @@ public class ScannerActivity extends AppCompatActivity {
      */
     private Bitmap nv21ToBitmap(byte[] nv21, int width, int height) {
         try {
-            YuvImage yuvImage = new YuvImage(nv21, android.graphics.ImageFormat.NV21, width, height, null);
+            YuvImage yuvImage = new YuvImage(nv21, ImageFormat.NV21, width, height, null);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            yuvImage.compressToJpeg(new android.graphics.Rect(0, 0, width, height), 100, out);
+            yuvImage.compressToJpeg(new Rect(0, 0, width, height), 100, out);
             byte[] imageBytes = out.toByteArray();
-            return android.graphics.BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
         } catch (Exception e) {
             Log.e("ScannerActivity", "Error converting NV21 to Bitmap", e);
             return null;
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode,

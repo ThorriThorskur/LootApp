@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -16,20 +17,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Scan Area Overlay (MaterialCardView for a green outline) -->
+    <!-- Scan Area Overlay (green outlined for MTG card) -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/scanArea"
-        android:layout_width="200dp"
-        android:layout_height="280dp"
+        android:layout_width="220dp"
+        android:layout_height="50dp"
         android:layout_margin="32dp"
-        app:cardCornerRadius="8dp"
-        app:strokeColor="@android:color/holo_green_dark"
-        app:strokeWidth="2dp"
         app:cardBackgroundColor="@android:color/transparent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@android:color/holo_green_dark"
+        app:strokeWidth="2dp" />
 
     <!-- Home Button -->
     <Button
@@ -52,7 +53,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="16dp"/>
 
-    <!-- Display recognized text -->
+    <!-- Recognized text display -->
     <TextView
         android:id="@+id/textViewRecognized"
         android:layout_width="wrap_content"
@@ -63,5 +64,86 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="32dp"/>
+
+    <!-- List Button (small button at top right) -->
+    <ImageButton
+        android:id="@+id/buttonList"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Show scan list"
+        android:src="@android:drawable/ic_menu_agenda"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Popup Layout for Scanned Cards List -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/popupScanList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="32dp"
+        android:visibility="gone"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <!-- Close Popup Button (X) -->
+            <ImageButton
+                android:id="@+id/buttonClosePopup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Close list"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- RecyclerView for scanned cards list -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerScanList"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/layoutBottomButtons"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buttonClosePopup" />
+
+            <!-- Bottom Buttons Container -->
+            <LinearLayout
+                android:id="@+id/layoutBottomButtons"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <Button
+                    android:id="@+id/buttonDeleteAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delete All" />
+
+                <Button
+                    android:id="@+id/buttonAddAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Add All" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
