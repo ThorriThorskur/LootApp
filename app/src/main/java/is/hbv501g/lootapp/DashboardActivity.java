@@ -7,6 +7,8 @@ import android.widget.ImageButton; // Change this import
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
+import is.hbv501g.lootapp.util.SessionManager;
+
 public class DashboardActivity extends AppCompatActivity {
 
     @Override
@@ -19,6 +21,7 @@ public class DashboardActivity extends AppCompatActivity {
         Button buttonSearch = findViewById(R.id.buttonSearch);
         Button buttonInventory = findViewById(R.id.buttonInventory);
         Button buttonScanner = findViewById(R.id.buttonScanner);
+        Button buttonLogout = findViewById(R.id.buttonLogout);
 
         // Home button: since this is the dashboard, you might refresh or do nothing.
         buttonHome.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +58,19 @@ public class DashboardActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(DashboardActivity.this, ScannerActivity.class);
                 startActivity(intent);
+            }
+        });
+        // Logout: clear session and return to LoginActivity
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Clear session data
+                SessionManager.getInstance(DashboardActivity.this).clearSession();
+
+                // Navigate to LoginActivity
+                Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

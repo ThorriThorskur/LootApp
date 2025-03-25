@@ -40,6 +40,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+
         buttonHome = findViewById(R.id.buttonHome);
         editTextSearch = findViewById(R.id.editTextSearch);
         buttonSearch = findViewById(R.id.buttonSearch);
