@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Top left Home ImageButton with circular icon -->
+    <!-- Top left Home ImageButton -->
     <ImageButton
         android:id="@+id/buttonHome"
         android:layout_width="48dp"
@@ -16,6 +16,16 @@
         android:contentDescription="Home"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="16dp" />
+
+    <!-- Top right Logout Button -->
+    <Button
+        android:id="@+id/buttonLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp" />
 
     <!-- Content Area -->
@@ -39,7 +49,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="16dp"
-        android:paddingBottom="32dp">  <!-- extra bottom padding for system nav bar -->
+        android:paddingBottom="32dp">
 
         <!-- Search Button (left) -->
         <Button

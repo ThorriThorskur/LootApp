@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,13 +18,15 @@ import java.util.List;
 import is.hbv501g.lootapp.adapter.CardAdapter;
 import is.hbv501g.lootapp.api.ApiClient;
 import is.hbv501g.lootapp.models.Card;
+import is.hbv501g.lootapp.models.api.AddCardRequest;
+import is.hbv501g.lootapp.models.api.AddCardResponse;
 import is.hbv501g.lootapp.models.api.SearchResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements CardAdapter.OnCardClickListener {
 
     private Button buttonHome;
     private EditText editTextSearch;
@@ -33,12 +34,12 @@ public class SearchActivity extends AppCompatActivity {
     private RecyclerView recyclerViewCards;
     private CardAdapter cardAdapter;
     private List<Card> cardList;
-    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
 
         buttonHome = findViewById(R.id.buttonHome);
         editTextSearch = findViewById(R.id.editTextSearch);
@@ -72,12 +73,10 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void searchCards(String query) {
-        progressBar.setVisibility(View.VISIBLE);
 
         ApiClient.getApiService().searchCards(query, 1).enqueue(new Callback<SearchResponse>() {
             @Override
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
-                progressBar.setVisibility(View.GONE);
 
                 if (response.isSuccessful() && response.body() != null) {
                     cardList.clear();
@@ -94,7 +93,42 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SearchResponse> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                Toast.makeText(SearchActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    // Implement the listener method for "Add" button
+    @Override
+    public void onAddToInventoryClick(Card card) {
+        addCardToInventory(card);
+    }
+    @Override
+    public void onCardClick(Card card) {
+        // card click card details).
+    }
+
+    // This function makes the API call to add the card to inventory
+    private void addCardToInventory(Card card) {
+        // Create an AddCardRequest using the card's id (ensure your Card model has a proper getId() method)
+        AddCardRequest request = new AddCardRequest(card.getId());
+        ApiClient.getApiService().addCardToInventory(request).enqueue(new Callback<AddCardResponse>() {
+            @Override
+            public void onResponse(Call<AddCardResponse> call, Response<AddCardResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(SearchActivity.this, "Card added to inventory!", Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        String errorBody = response.errorBody().string();
+                        Toast.makeText(SearchActivity.this, "Failed to add card: " + errorBody, Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(SearchActivity.this, "Failed to add card.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddCardResponse> call, Throwable t) {
                 Toast.makeText(SearchActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

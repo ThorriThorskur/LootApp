@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 // ApiClient.java
 public class ApiClient {
-    private static final String BASE_URL = "https://vefthjonusta-magicgathering-db.vercel.app/api";
+    private static final String BASE_URL = "https://vefthjonusta-magicgathering-db.vercel.app/api/";
     private static ApiService apiService;
     private static String authToken;
 
