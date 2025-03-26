@@ -60,6 +60,7 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         // Logout: clear session and return to LoginActivity
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
