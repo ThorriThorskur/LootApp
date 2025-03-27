@@ -70,34 +70,17 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser(String username, String email, String password) {
-        // progressBar.setVisibility(View.VISIBLE);
-
         RegisterRequest request = new RegisterRequest(username, email, password);
-
         ApiClient.getApiService().register(request).enqueue(new Callback<RegisterResponse>() {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-                // progressBar.setVisibility(View.GONE);
-
                 if (response.isSuccessful() && response.body() != null) {
-                    RegisterResponse registerResponse = response.body();
-
-                    // Save token and update API client via SessionManager
-                    sessionManager.saveAuthToken(registerResponse.getToken());
-
-                    if (registerResponse.getUser() != null) {
-                        sessionManager.saveUserDetails(
-                                registerResponse.getUser().getId(),
-                                registerResponse.getUser().getUsername()
-                        );
-
-                        // Navigate to Dashboard upon successful registration
-                        Intent intent = new Intent(RegisterActivity.this, DashboardActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        Toast.makeText(RegisterActivity.this, "Registration failed: user data missing", Toast.LENGTH_SHORT).show();
-                    }
+                    // Registration successful, notify the user.
+                    Toast.makeText(RegisterActivity.this, "Registration successful! Please log in.", Toast.LENGTH_SHORT).show();
+                    // Navigate to LoginActivity for authentication.
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                 } else {
                     try {
                         String errorBody = response.errorBody().string();
@@ -110,9 +93,9 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<RegisterResponse> call, Throwable t) {
-                // progressBar.setVisibility(View.GONE);
                 Toast.makeText(RegisterActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 }
