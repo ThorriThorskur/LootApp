@@ -19,6 +19,10 @@ public class InventoryCard {
         return quantity;
     }
 
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     //constructor
     public InventoryCard(Card card, int quantity) {
         this.card = card;
