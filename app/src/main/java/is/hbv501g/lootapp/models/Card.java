@@ -1,16 +1,31 @@
-// Card.java - complete implementation
 package is.hbv501g.lootapp.models;
+
+import com.google.gson.annotations.SerializedName;
 
 public class Card {
     private String id;
     private String name;
+
+    @SerializedName("mana_cost")
     private String mana_cost;
+
+    @SerializedName("type_line")
     private String type_line;
+
+    @SerializedName("oracle_text")
     private String oracle_text;
+
     private String usd;
+
+    @SerializedName("usd_foil")
     private String usd_foil;
-    private String image_url;
+
+    @SerializedName(value = "imageUrl", alternate = {"image_url"})
+    private String imageUrl;
+
+    @SerializedName("set_name")
     private String set_name;
+
     private boolean isLegendary;
     private boolean isLand;
 
@@ -44,7 +59,7 @@ public class Card {
     }
 
     public String getImageUrl() {
-        return image_url;
+        return imageUrl;
     }
 
     public String getSetName() {
