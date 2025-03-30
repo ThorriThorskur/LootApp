@@ -1,12 +1,14 @@
 package is.hbv501g.lootapp.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +18,14 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import is.hbv501g.lootapp.R;
+import is.hbv501g.lootapp.api.ApiClient;
 import is.hbv501g.lootapp.models.InventoryCard;
+import is.hbv501g.lootapp.models.api.RemoveCardResponse;
+import is.hbv501g.lootapp.models.api.UpdateQuantityRequest;
+import is.hbv501g.lootapp.models.api.UpdateQuantityResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.InventoryViewHolder> {
 
@@ -45,7 +54,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
             holder.textViewCardType.setText(inventoryCard.getCard().getTypeLine());
             holder.textViewQuantity.setText("Qty: " + inventoryCard.getQuantity());
 
-            // Load card image if available
+            // Load card image if available.
             if (inventoryCard.getCard().getImageUrl() != null && !inventoryCard.getCard().getImageUrl().isEmpty()) {
                 Glide.with(context)
                         .load(inventoryCard.getCard().getImageUrl())
@@ -54,6 +63,77 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
             } else {
                 holder.imageViewCard.setImageResource(R.drawable.placeholder_card);
             }
+
+            // When user taps plus, increase quantity and show the check button.
+            holder.buttonPlus.setOnClickListener(v -> {
+                int newQuantity = inventoryCard.getQuantity() + 1;
+                inventoryCard.setQuantity(newQuantity);
+                holder.textViewQuantity.setText("Qty: " + newQuantity);
+                holder.buttonCheck.setVisibility(View.VISIBLE);
+                holder.buttonCheck.setEnabled(true);
+                Log.d("InventoryAdapter", "Increased quantity to " + newQuantity + " for " + inventoryCard.getCard().getName());
+            });
+
+            // When user taps minus, decrease quantity (allowing 0) and show the check button.
+            holder.buttonMinus.setOnClickListener(v -> {
+                int currentQuantity = inventoryCard.getQuantity();
+                if (currentQuantity > 0) {
+                    int newQuantity = currentQuantity - 1;
+                    inventoryCard.setQuantity(newQuantity);
+                    holder.textViewQuantity.setText("Qty: " + newQuantity);
+                    holder.buttonCheck.setVisibility(View.VISIBLE);
+                    holder.buttonCheck.setEnabled(true);
+                    Log.d("InventoryAdapter", "Decreased quantity to " + newQuantity + " for " + inventoryCard.getCard().getName());
+                }
+            });
+
+            // When user confirms with the check button:
+            // - If the new quantity is 0, remove the card.
+            // - Otherwise, update the quantity.
+            holder.buttonCheck.setOnClickListener(v -> {
+                int newQuantity = Integer.parseInt(holder.textViewQuantity.getText().toString().replace("Qty: ", ""));
+                if (newQuantity == 0) {
+                    // Remove card via backend call.
+                    ApiClient.getApiService().removeCard(inventoryCard.getCard().getId()).enqueue(new Callback<RemoveCardResponse>() {
+                        @Override
+                        public void onResponse(Call<RemoveCardResponse> call, Response<RemoveCardResponse> response) {
+                            if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                                int pos = holder.getAdapterPosition();
+                                inventoryList.remove(pos);
+                                notifyItemRemoved(pos);
+                                Toast.makeText(context, "Card removed", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, "Failed to remove card", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<RemoveCardResponse> call, Throwable t) {
+                            Toast.makeText(context, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    // Update quantity via backend call.
+                    UpdateQuantityRequest req = new UpdateQuantityRequest(inventoryCard.getCard().getId(), newQuantity);
+                    ApiClient.getApiService().updateCardQuantity(req).enqueue(new Callback<UpdateQuantityResponse>() {
+                        @Override
+                        public void onResponse(Call<UpdateQuantityResponse> call, Response<UpdateQuantityResponse> response) {
+                            if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                                Toast.makeText(context, "Quantity updated", Toast.LENGTH_SHORT).show();
+                                // Hide the check button after successful update.
+                                holder.buttonCheck.setVisibility(View.GONE);
+                            } else {
+                                Toast.makeText(context, "Failed to update quantity", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<UpdateQuantityResponse> call, Throwable t) {
+                            Toast.makeText(context, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
         }
     }
 
@@ -67,6 +147,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
         TextView textViewCardName;
         TextView textViewCardType;
         TextView textViewQuantity;
+        Button buttonPlus, buttonMinus, buttonCheck;
 
         public InventoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,6 +155,9 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
             textViewCardName = itemView.findViewById(R.id.textViewCardName);
             textViewCardType = itemView.findViewById(R.id.textViewCardType);
             textViewQuantity = itemView.findViewById(R.id.textViewQuantity);
+            buttonPlus = itemView.findViewById(R.id.buttonPlus);
+            buttonMinus = itemView.findViewById(R.id.buttonMinus);
+            buttonCheck = itemView.findViewById(R.id.buttonCheck);
         }
     }
 }

@@ -16,17 +16,30 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="16dp"/>
 
+    <!-- Total Value TextView -->
+    <TextView
+        android:id="@+id/textViewTotalValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Total Value: $0.00"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/buttonHome"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <!-- RecyclerView for inventory cards -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewInventory"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/buttonHome"
+        app:layout_constraintTop_toBottomOf="@id/textViewTotalValue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="8dp" />
-    
+
     <!-- Empty state message -->
     <TextView
         android:id="@+id/textViewEmptyInventory"
@@ -39,7 +52,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-    
+
     <!-- Progress bar -->
     <ProgressBar
         android:id="@+id/progressBar"
