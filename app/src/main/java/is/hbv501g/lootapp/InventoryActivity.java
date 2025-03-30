@@ -1,10 +1,13 @@
 package is.hbv501g.lootapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,12 +25,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-//InventoryActivity.java
 public class InventoryActivity extends AppCompatActivity {
 
     private InventoryAdapter inventoryAdapter;
     private List<InventoryCard> inventoryList;
     private ProgressBar progressBar;
+    private TextView textViewTotalValue;  // New TextView for total value and update message
+
+    // SharedPreferences key for yesterday's total (for end-of-day update)
+    private static final String PREFS_NAME = "InventoryPrefs";
+    private static final String KEY_YESTERDAY_TOTAL = "yesterday_total";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,7 @@ public class InventoryActivity extends AppCompatActivity {
         Button buttonHome = findViewById(R.id.buttonHome);
         RecyclerView recyclerViewInventory = findViewById(R.id.recyclerViewInventory);
         progressBar = findViewById(R.id.progressBar);
+        textViewTotalValue = findViewById(R.id.textViewTotalValue); // Ensure this is defined in your XML
 
         // Set up RecyclerView
         inventoryList = new ArrayList<>();
@@ -70,6 +78,9 @@ public class InventoryActivity extends AppCompatActivity {
                     inventoryList.addAll(response.body().getInventory());
                     inventoryAdapter.notifyDataSetChanged();
 
+                    // Update total value and end-of-day update message
+                    updateTotalValue();
+
                     if (inventoryList.isEmpty()) {
                         // Show empty state
                         findViewById(R.id.textViewEmptyInventory).setVisibility(View.VISIBLE);
@@ -87,5 +98,43 @@ public class InventoryActivity extends AppCompatActivity {
                 Toast.makeText(InventoryActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    /**
+     * Computes the total value of stored cards and updates a TextView with an end-of-day update.
+     */
+    private void updateTotalValue() {
+        double totalValue = 0.0;
+        for (InventoryCard ic : inventoryList) {
+            if (ic.getCard() != null && ic.getCard().getUsd() != null && !ic.getCard().getUsd().isEmpty()) {
+                try {
+                    double price = Double.parseDouble(ic.getCard().getUsd());
+                    totalValue += price * ic.getQuantity();
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // Retrieve yesterday's total value from SharedPreferences (if available)
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        double yesterdayTotal = Double.longBitsToDouble(prefs.getLong(KEY_YESTERDAY_TOTAL, Double.doubleToLongBits(totalValue)));
+
+        double diff = totalValue - yesterdayTotal;
+        String updateMessage;
+        if (diff > 0) {
+            updateMessage = "Your collection increased by $" + String.format("%.2f", diff);
+        } else if (diff < 0) {
+            updateMessage = "Your collection dropped by $" + String.format("%.2f", Math.abs(diff));
+        } else {
+            updateMessage = "No change in collection value";
+        }
+
+        textViewTotalValue.setText("Total Value: $" + String.format("%.2f", totalValue) + "\n" + updateMessage);
+
+        // Save today's total as yesterday's value for the next update.
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(KEY_YESTERDAY_TOTAL, Double.doubleToLongBits(totalValue));
+        editor.apply();
     }
 }
