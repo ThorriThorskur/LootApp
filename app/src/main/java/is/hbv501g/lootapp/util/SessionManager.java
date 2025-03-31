@@ -11,8 +11,9 @@ public class SessionManager {
     private static final String KEY_TOKEN = "auth_token";
     private static final String KEY_USERNAME = "username";
     private static final String KEY_USER_ID = "user_id";
+    private static final String KEY_DARK_MODE = "dark_mode";
 
-    private SharedPreferences sharedPreferences;
+    private static SharedPreferences sharedPreferences;
     private static SessionManager instance;
 
     private SessionManager(Context context) {
@@ -55,5 +56,15 @@ public class SessionManager {
         editor.clear();
         editor.apply();
         ApiClient.setAuthToken(null);
+    }
+
+    public static void setDarkModeEnabled(boolean isDarkMode) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_DARK_MODE, isDarkMode);
+        editor.apply();
+    }
+
+    public static boolean isDarkModeEnabled() {
+        return sharedPreferences.getBoolean(KEY_DARK_MODE, false);
     }
 }

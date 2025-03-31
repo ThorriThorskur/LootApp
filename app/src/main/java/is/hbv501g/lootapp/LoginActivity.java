@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import java.io.IOException;
 
@@ -21,7 +22,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 public class LoginActivity extends AppCompatActivity {
 
     private EditText editTextUsername, editTextPassword;
@@ -30,24 +30,32 @@ public class LoginActivity extends AppCompatActivity {
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sessionManager = SessionManager.getInstance(this);
+
+        // Apply dark/light mode before super.onCreate
+        if (sessionManager.isDarkModeEnabled()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-        sessionManager = SessionManager.getInstance(this);
-
         // Check if already logged in
         if (sessionManager.isLoggedIn()) {
-            // Go directly to Dashboard
             startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
             finish();
+            return;
         }
 
+        // Get references to UI elements
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPassword);
         Button buttonLogin = findViewById(R.id.buttonLogin);
         Button buttonRegister = findViewById(R.id.buttonRegister);
 
+        // Login button
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // Register button
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,7 +82,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String username, String password) {
-
         LoginRequest loginRequest = new LoginRequest(username, password);
 
         ApiClient.getApiService().login(loginRequest).enqueue(new Callback<LoginResponse>() {
@@ -83,35 +91,44 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
 
-                    // Save token and update ApiClient via SessionManager
+                    // Save token and update ApiClient
                     sessionManager.saveAuthToken(loginResponse.getToken());
 
                     if (loginResponse.getUser() != null) {
+                        // Save user details
                         sessionManager.saveUserDetails(
                                 loginResponse.getUser().getId(),
                                 loginResponse.getUser().getUsername()
                         );
 
-                        // Navigate to Dashboard if user data exists
                         Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                         startActivity(intent);
                         finish();
+
                     } else {
-                        Toast.makeText(LoginActivity.this, "Login failed: user data is missing", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this,
+                                "Login failed: user data is missing",
+                                Toast.LENGTH_LONG).show();
                     }
                 } else {
                     try {
                         String errorBody = response.errorBody().string();
-                        Toast.makeText(LoginActivity.this, "Login failed: " + errorBody, Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this,
+                                "Login failed: " + errorBody,
+                                Toast.LENGTH_LONG).show();
                     } catch (IOException e) {
-                        Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this,
+                                "Login failed",
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this,
+                        "Network error: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
             }
         });
     }
