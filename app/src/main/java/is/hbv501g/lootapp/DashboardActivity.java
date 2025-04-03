@@ -22,6 +22,7 @@ public class DashboardActivity extends AppCompatActivity {
         Button buttonInventory = findViewById(R.id.buttonInventory);
         Button buttonScanner = findViewById(R.id.buttonScanner);
         ImageButton buttonSettings = findViewById(R.id.buttonSettings);
+        Button buttonImport = findViewById(R.id.buttonImport);
 
         // Home button
         buttonHome.setOnClickListener(new View.OnClickListener() {
@@ -68,5 +69,15 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        buttonImport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this, ImportActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }

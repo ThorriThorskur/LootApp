@@ -73,4 +73,17 @@ public class Card {
     public boolean isLand() {
         return isLand;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTypeLine(String type_line) {
+        this.type_line = type_line;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
 }

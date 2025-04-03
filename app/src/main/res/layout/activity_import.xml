@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Home Button -->
+    <ImageButton
+        android:id="@+id/buttonHome"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/circle_background"
+        android:src="@drawable/ic_home"
+        android:contentDescription="Home"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Multi-line EditText for pasting CSV data -->
+    <EditText
+        android:id="@+id/editTextCsvInput"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:hint="Paste your CSV export here..."
+        android:inputType="textMultiLine"
+        android:gravity="top|start"
+        android:background="@android:drawable/edit_text"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/buttonHome"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonImport" />
+
+    <!-- Import Button -->
+    <Button
+        android:id="@+id/buttonImport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Import Collection"
+        app:layout_constraintTop_toBottomOf="@id/editTextCsvInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- RecyclerView for previewing imported items (optional) -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewImported"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/buttonImport"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        android:layout_marginTop="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
