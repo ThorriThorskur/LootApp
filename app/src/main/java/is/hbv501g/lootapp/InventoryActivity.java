@@ -158,17 +158,21 @@ public class InventoryActivity extends AppCompatActivity {
 
     private String generateCsv(List<InventoryCard> inventory) {
         StringBuilder csv = new StringBuilder();
-        // Header row (adjust columns as needed)
-        csv.append("Card Name,Card Type,Quantity\n");
+        // Header row
+        csv.append("Card Name,Card Type,Quantity,Image URL\n");
         for (InventoryCard invCard : inventory) {
-            if(invCard.getCard() != null) {
+            if (invCard.getCard() != null) {
                 csv.append(invCard.getCard().getName()).append(",");
                 csv.append(invCard.getCard().getTypeLine()).append(",");
-                csv.append(invCard.getQuantity()).append("\n");
+                csv.append(invCard.getQuantity()).append(",");
+                // Append the image URL if available
+                String imageUrl = invCard.getCard().getImageUrl();
+                csv.append(imageUrl != null ? imageUrl : "").append("\n");
             }
         }
         return csv.toString();
     }
+
     private void exportCollection() {
         // Assuming inventoryList is your list of InventoryCard objects
         String csvData = generateCsv(inventoryList);
@@ -180,6 +184,7 @@ public class InventoryActivity extends AppCompatActivity {
         shareIntent.putExtra(Intent.EXTRA_TEXT, csvData);
         startActivity(Intent.createChooser(shareIntent, "Share your collection via"));
     }
+
 
 
 

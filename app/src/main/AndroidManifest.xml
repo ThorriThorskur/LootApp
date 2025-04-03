@@ -46,6 +46,10 @@
             android:name=".StatisticsActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".ImportActivity"
+            android:exported="true" />
+
 
         <activity
             android:name=".LoginActivity"
