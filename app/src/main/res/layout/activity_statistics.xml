@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <!-- Back Button: Takes user to Inventory -->
+    <Button
+        android:id="@+id/buttonBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Home Button: Takes user to Dashboard -->
+    <Button
+        android:id="@+id/buttonHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Home"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Your summary statistics TextViews -->
+    <TextView
+        android:id="@+id/textViewMostExpensive"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Most Expensive Card: "
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/buttonBack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewTotalCards"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Total Cards: "
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/textViewMostExpensive"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewAverageCost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Average Card Cost: "
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/textViewTotalCards"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

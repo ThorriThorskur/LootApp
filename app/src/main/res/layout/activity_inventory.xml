@@ -16,6 +16,17 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="16dp" />
 
+    <!-- Stats Button (center) -->
+    <Button
+        android:id="@+id/buttonStats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stats"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/buttonHome"
+        app:layout_constraintEnd_toStartOf="@id/buttonExport"
+        android:layout_margin="16dp" />
+
     <!-- Export Button (right) -->
     <Button
         android:id="@+id/buttonExport"
