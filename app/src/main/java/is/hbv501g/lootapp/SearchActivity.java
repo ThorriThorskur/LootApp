@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +45,8 @@ public class SearchActivity extends AppCompatActivity implements CardAdapter.OnC
         setContentView(R.layout.activity_search);
 
 
-        buttonHome = findViewById(R.id.buttonHome);
+        ImageButton buttonHome = findViewById(R.id.buttonHome);
+        ImageButton buttonSettings = findViewById(R.id.buttonSettings);
         editTextSearch = findViewById(R.id.editTextSearch);
         buttonSearch = findViewById(R.id.buttonSearch);
         recyclerViewCards = findViewById(R.id.recyclerViewCards);
@@ -58,9 +60,18 @@ public class SearchActivity extends AppCompatActivity implements CardAdapter.OnC
         buttonHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Restart the DashboardActivity
                 Intent intent = new Intent(SearchActivity.this, DashboardActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SearchActivity.this, settingsActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -62,7 +62,7 @@ public class ScannerActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA};
 
-    private Button buttonHome, buttonScan;
+    private Button buttonScan;
     private PreviewView previewView;
     private TextView textViewRecognized;
     // The overlay that defines the scan area.
@@ -93,7 +93,7 @@ public class ScannerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scanner);
 
         // Main scanner UI elements
-        buttonHome = findViewById(R.id.buttonHome);
+        ImageButton buttonHome = findViewById(R.id.buttonHome);
         buttonScan = findViewById(R.id.buttonScan);
         previewView = findViewById(R.id.previewView);
         textViewRecognized = findViewById(R.id.textViewRecognized);
