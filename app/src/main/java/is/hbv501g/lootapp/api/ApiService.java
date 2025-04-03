@@ -26,4 +26,11 @@ public interface ApiService {
 
     @POST("cards/add_card_to_inventory")
     Call<AddCardResponse> addCardToInventory(@Body AddCardRequest request);
+
+    @GET("wishlist")
+    Call<WishlistResponse> getWishlist();
+
+    @POST("cards/add_card_to_wishlist")
+    Call<AddCardResponse> addCardToWishlist(@Body AddCardRequest request);
+
 }

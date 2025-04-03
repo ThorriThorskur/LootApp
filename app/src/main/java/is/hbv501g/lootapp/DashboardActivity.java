@@ -22,6 +22,7 @@ public class DashboardActivity extends AppCompatActivity {
         Button buttonInventory = findViewById(R.id.buttonInventory);
         Button buttonScanner = findViewById(R.id.buttonScanner);
         Button buttonLogout = findViewById(R.id.buttonLogout);
+        Button buttonWishlist = findViewById(R.id.buttonWishlist);
 
         // Home button: since this is the dashboard, you might refresh or do nothing.
         buttonHome.setOnClickListener(new View.OnClickListener() {
@@ -74,5 +75,15 @@ public class DashboardActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        // Navigate to Wishlist
+        buttonWishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this, WishlistActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }
