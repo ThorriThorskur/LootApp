@@ -61,6 +61,14 @@ public class InventoryActivity extends AppCompatActivity {
             }
         });
 
+        Button buttonExport = findViewById(R.id.buttonExport);
+        buttonExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exportCollection();
+            }
+        });
+
         // Load inventory when activity starts
         loadInventory();
     }
@@ -137,4 +145,35 @@ public class InventoryActivity extends AppCompatActivity {
         editor.putLong(KEY_YESTERDAY_TOTAL, Double.doubleToLongBits(totalValue));
         editor.apply();
     }
+
+
+    private String generateCsv(List<InventoryCard> inventory) {
+        StringBuilder csv = new StringBuilder();
+        // Header row (adjust columns as needed)
+        csv.append("Card Name,Card Type,Quantity\n");
+        for (InventoryCard invCard : inventory) {
+            if(invCard.getCard() != null) {
+                csv.append(invCard.getCard().getName()).append(",");
+                csv.append(invCard.getCard().getTypeLine()).append(",");
+                csv.append(invCard.getQuantity()).append("\n");
+            }
+        }
+        return csv.toString();
+    }
+    private void exportCollection() {
+        // Assuming inventoryList is your list of InventoryCard objects
+        String csvData = generateCsv(inventoryList);
+
+        // Create a share intent
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/csv"); // You can also use "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "My MTG Collection");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, csvData);
+        startActivity(Intent.createChooser(shareIntent, "Share your collection via"));
+    }
+
+
+
+
+
 }

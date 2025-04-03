@@ -22,6 +22,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Search..."
+        android:imeOptions="actionSearch"
+        android:inputType="text"
         app:layout_constraintTop_toBottomOf="@id/buttonHome"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
