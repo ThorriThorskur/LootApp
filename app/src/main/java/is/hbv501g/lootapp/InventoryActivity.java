@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +42,8 @@ public class InventoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
 
-        Button buttonHome = findViewById(R.id.buttonHome);
+        ImageButton buttonHome = findViewById(R.id.buttonHome);
+        ImageButton buttonSettings = findViewById(R.id.buttonSettings);
         RecyclerView recyclerViewInventory = findViewById(R.id.recyclerViewInventory);
         progressBar = findViewById(R.id.progressBar);
         textViewTotalValue = findViewById(R.id.textViewTotalValue); // Ensure this is defined in your XML
@@ -52,12 +54,23 @@ public class InventoryActivity extends AppCompatActivity {
         recyclerViewInventory.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewInventory.setAdapter(inventoryAdapter);
 
+        // Home button
         buttonHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Restart the DashboardActivity
                 Intent intent = new Intent(InventoryActivity.this, DashboardActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        // Settings button
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(InventoryActivity.this, settingsActivity.class);
+                startActivity(intent);
             }
         });
 

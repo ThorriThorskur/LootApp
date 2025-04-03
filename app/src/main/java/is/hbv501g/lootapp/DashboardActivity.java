@@ -35,6 +35,7 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
+        // Settings button
         buttonSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
