@@ -29,6 +29,7 @@ public interface ApiService {
     @PUT("inventory/update_quantity")
     Call<UpdateQuantityResponse> updateCardQuantity(@Body UpdateQuantityRequest request);
 
-    @DELETE("inventory/remove_card")
-    Call<RemoveCardResponse> removeCard(@Query("cardId") String cardId);
+    @HTTP(method = "DELETE", path = "inventory/remove_card", hasBody = true)
+    Call<RemoveCardResponse> removeCard(@Body RemoveCardRequest request);
+
 }

@@ -5,7 +5,7 @@ public class RemoveCardResponse {
     private String message;
 
     public boolean isSuccess() {
-        return success;
+        return message != null && message.contains("Card removed from inventory successfully");
     }
 
     public String getMessage() {
