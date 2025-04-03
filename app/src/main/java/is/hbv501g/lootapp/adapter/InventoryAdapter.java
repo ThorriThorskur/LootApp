@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import is.hbv501g.lootapp.InventoryActivity;
 import is.hbv501g.lootapp.R;
 import is.hbv501g.lootapp.api.ApiClient;
 import is.hbv501g.lootapp.models.InventoryCard;
@@ -108,6 +109,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
                                 inventoryList.remove(pos);
                                 notifyItemRemoved(pos);
                                 Toast.makeText(context, "Card removed", Toast.LENGTH_SHORT).show();
+                                ((InventoryActivity) context).updateTotalValue();
                             }
                         } else {
                             Toast.makeText(context, "Failed to remove card", Toast.LENGTH_SHORT).show();
@@ -129,6 +131,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
                             // Update originalQuantity to reflect confirmed change
                             inventoryCard.setOriginalQuantity(newQuantity);
                             holder.buttonCheck.setVisibility(View.GONE);
+                            ((InventoryActivity) context).updateTotalValue();
                         } else {
                             Toast.makeText(context, "Failed to update quantity", Toast.LENGTH_SHORT).show();
                         }

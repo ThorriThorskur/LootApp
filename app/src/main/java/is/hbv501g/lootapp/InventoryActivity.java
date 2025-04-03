@@ -120,7 +120,7 @@ public class InventoryActivity extends AppCompatActivity {
     /**
      * Computes the total value of stored cards and updates a TextView with an end-of-day update.
      */
-    private void updateTotalValue() {
+    public void updateTotalValue() {
         double totalValue = 0.0;
         for (InventoryCard ic : inventoryList) {
             if (ic.getCard() != null && ic.getCard().getUsd() != null && !ic.getCard().getUsd().isEmpty()) {
