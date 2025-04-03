@@ -3,9 +3,12 @@ package is.hbv501g.lootapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -70,6 +73,23 @@ public class SearchActivity extends AppCompatActivity implements CardAdapter.OnC
                 }
             }
         });
+
+        // Trigger search on enter
+        editTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String query = editTextSearch.getText().toString().trim();
+                    if (!TextUtils.isEmpty(query)) {
+                        searchCards(query);
+                    }
+                    editTextSearch.clearFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+
     }
 
     private void searchCards(String query) {
