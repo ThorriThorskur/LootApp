@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Home Button -->
+    <!-- Top section: Home and Settings -->
     <ImageButton
         android:id="@+id/buttonHome"
         android:layout_width="48dp"
@@ -18,33 +18,52 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <ImageButton
+        android:id="@+id/buttonSettings"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/circle_background"
+        android:src="@drawable/ic_settings"
+        android:contentDescription="Settings"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- Multi-line EditText for pasting CSV data -->
+
+    <!-- Import Button -->
+
+    <!-- RecyclerView for previewing imported items (optional) -->
+
     <EditText
         android:id="@+id/editTextCsvInput"
         android:layout_width="0dp"
         android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:drawable/edit_text"
+        android:gravity="top|start"
         android:hint="Paste your CSV export here..."
         android:inputType="textMultiLine"
-        android:gravity="top|start"
-        android:background="@android:drawable/edit_text"
         android:padding="8dp"
-        app:layout_constraintTop_toBottomOf="@id/buttonHome"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonImport"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/buttonImport" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonHome" />
 
-    <!-- Import Button -->
     <Button
         android:id="@+id/buttonImport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Import Collection"
-        app:layout_constraintTop_toBottomOf="@id/editTextCsvInput"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextCsvInput" />
 
-    <!-- RecyclerView for previewing imported items (optional) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewImported"
         android:layout_width="0dp"

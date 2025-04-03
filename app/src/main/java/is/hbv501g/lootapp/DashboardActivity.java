@@ -18,10 +18,10 @@ public class DashboardActivity extends AppCompatActivity {
 
         // Change type to ImageButton
         ImageButton buttonHome = findViewById(R.id.buttonHome);
+        ImageButton buttonSettings = findViewById(R.id.buttonSettings);
         Button buttonSearch = findViewById(R.id.buttonSearch);
         Button buttonInventory = findViewById(R.id.buttonInventory);
         Button buttonScanner = findViewById(R.id.buttonScanner);
-        ImageButton buttonSettings = findViewById(R.id.buttonSettings);
         Button buttonImport = findViewById(R.id.buttonImport);
 
         // Home button

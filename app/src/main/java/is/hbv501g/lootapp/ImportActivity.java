@@ -41,6 +41,7 @@ public class ImportActivity extends AppCompatActivity {
         recyclerViewImported.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewImported.setAdapter(importedAdapter);
         ImageButton buttonHome = findViewById(R.id.buttonHome);
+        ImageButton buttonSettings = findViewById(R.id.buttonSettings);
 
         // Home button
         buttonHome.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +51,14 @@ public class ImportActivity extends AppCompatActivity {
                 Intent intent = new Intent(ImportActivity.this, DashboardActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ImportActivity.this, settingsActivity.class);
+                startActivity(intent);
             }
         });
 
