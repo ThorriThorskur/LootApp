@@ -5,6 +5,7 @@ public class InventoryCard {
     private int id;
     private String cardId;
     private int quantity;
+    private int originalQuantity;
     private String condition;
     private String addedAt;
     private Card card;
@@ -27,6 +28,15 @@ public class InventoryCard {
     public InventoryCard(Card card, int quantity) {
         this.card = card;
         this.quantity = quantity;
+        this.originalQuantity = quantity;
     }
 
+    public int getOriginalQuantity() {
+        return originalQuantity;
+    }
+
+    public void setOriginalQuantity(int originalQuantity) {
+        this.originalQuantity = originalQuantity;
+
+    }
 }
