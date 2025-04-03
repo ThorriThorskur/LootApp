@@ -69,6 +69,15 @@ public class InventoryActivity extends AppCompatActivity {
             }
         });
 
+        Button buttonStats = findViewById(R.id.buttonStats);
+        buttonStats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(InventoryActivity.this, StatisticsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // Load inventory when activity starts
         loadInventory();
     }
