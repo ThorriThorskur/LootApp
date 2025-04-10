@@ -121,7 +121,7 @@
                 android:id="@+id/buttonExtra"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Mystery"
+                android:text="Rule book"
                 android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
