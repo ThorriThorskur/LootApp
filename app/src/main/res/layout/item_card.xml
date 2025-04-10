@@ -52,6 +52,13 @@
                 android:layout_height="wrap_content"
                 android:text="Add"
                 android:layout_marginTop="8dp"/>
+            <!-- Wishlist Button -->
+            <Button
+                android:id="@+id/buttonAddToWishlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wishlist"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -29,6 +29,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public interface OnCardClickListener {
         void onCardClick(Card card);
         void onAddToInventoryClick(Card card);
+        void onAddToWishlistClick(Card card);
     }
 
     public CardAdapter(List<Card> cardList, Context context) {
@@ -78,6 +79,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
                 listener.onAddToInventoryClick(card);
             }
         });
+        holder.buttonAddToWishlist.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onAddToWishlistClick(card);
+            }
+        });
     }
 
     @Override
@@ -90,6 +96,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         TextView textViewCardName;
         TextView textViewCardType;
         Button buttonAddToInventory;
+        Button buttonAddToWishlist;
 
         public CardViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -97,6 +104,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             textViewCardName = itemView.findViewById(R.id.textViewCardName);
             textViewCardType = itemView.findViewById(R.id.textViewCardType);
             buttonAddToInventory = itemView.findViewById(R.id.buttonAddToInventory);
+            buttonAddToWishlist = itemView.findViewById(R.id.buttonAddToWishlist);
         }
     }
 }

@@ -52,6 +52,11 @@
 
 
         <activity
+            android:name=".WishlistActivity"
+            android:exported="true" />
+
+
+        <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.LootApp">

@@ -3,6 +3,7 @@ package is.hbv501g.lootapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -137,6 +138,37 @@ public class SearchActivity extends AppCompatActivity implements CardAdapter.OnC
     @Override
     public void onCardClick(Card card) {
         // card click card details).
+    }
+
+    @Override
+    public void onAddToWishlistClick(Card card) {
+        // Create a request object (make sure your AddCardRequest takes the correct data)
+        AddCardRequest request = new AddCardRequest(card.getId());
+
+        // Call the wishlist API endpoint
+        ApiClient.getApiService().addCardToWishlist(request).enqueue(new Callback<AddCardResponse>() {
+            @Override
+            public void onResponse(Call<AddCardResponse> call, Response<AddCardResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(SearchActivity.this, "Card added to wishlist!", Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        String errorBody = response.errorBody().string();
+                        // Log the error so you can inspect it in Logcat:
+                        Log.e("Wishlist", "Failed to add card: " + errorBody);
+                        Toast.makeText(SearchActivity.this, "Failed to add card to wishlist", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(SearchActivity.this, "Failed to add card to wishlist", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<AddCardResponse> call, Throwable t) {
+                Toast.makeText(SearchActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     // This function makes the API call to add the card to inventory
