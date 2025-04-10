@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import is.hbv501g.lootapp.models.api.RemoveCardRequest;
 import is.hbv501g.lootapp.models.api.RemoveCardResponse;
 import is.hbv501g.lootapp.models.api.UpdateQuantityRequest;
 import is.hbv501g.lootapp.models.api.UpdateQuantityResponse;
+import is.hbv501g.lootapp.util.FavoritesManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,10 +35,13 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
 
     private List<InventoryCard> inventoryList;
     private Context context;
+    private FavoritesManager favoritesManager;
 
     public InventoryAdapter(List<InventoryCard> inventoryList, Context context) {
         this.inventoryList = inventoryList;
         this.context = context;
+        // Initialize the FavoritesManager for local storage handling of favorite states.
+        this.favoritesManager = new FavoritesManager(context);
     }
 
     @NonNull
@@ -51,16 +56,17 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
     public void onBindViewHolder(@NonNull InventoryViewHolder holder, int position) {
         InventoryCard inventoryCard = inventoryList.get(position);
 
-        // If originalQuantity is not set (i.e., 0), initialize it.
+        // Ensure originalQuantity is set (for comparing changes)
         if (inventoryCard.getOriginalQuantity() == 0) {
             inventoryCard.setOriginalQuantity(inventoryCard.getQuantity());
         }
 
+        // Bind basic data
         holder.textViewCardName.setText(inventoryCard.getCard().getName());
         holder.textViewCardType.setText(inventoryCard.getCard().getTypeLine());
         holder.textViewQuantity.setText("Qty: " + inventoryCard.getQuantity());
 
-        // Load card image if available.
+        // Load the card image using Glide
         if (inventoryCard.getCard().getImageUrl() != null && !inventoryCard.getCard().getImageUrl().isEmpty()) {
             Glide.with(context)
                     .load(inventoryCard.getCard().getImageUrl())
@@ -70,10 +76,27 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
             holder.imageViewCard.setImageResource(R.drawable.placeholder_card);
         }
 
-        // Initially, if no changes have been made, hide the check button.
-        holder.buttonCheck.setVisibility(View.GONE);
+        // Set the favorite star icon based on local storage
+        if (favoritesManager.isFavorite(inventoryCard.getCard().getId())) {
+            holder.buttonFavorite.setImageResource(R.drawable.ic_star_filled);
+        } else {
+            holder.buttonFavorite.setImageResource(R.drawable.ic_star_outline);
+        }
+        // Toggle favorite state on star button click
+        holder.buttonFavorite.setOnClickListener(v -> {
+            String cardId = inventoryCard.getCard().getId();
+            if (favoritesManager.isFavorite(cardId)) {
+                favoritesManager.removeFavorite();
+            } else {
+                favoritesManager.addFavorite(cardId);
+            }
+            notifyDataSetChanged();
+        });
 
-        // Plus button
+        // Initially hide the check button unless a change is made.
+        updateCheckVisibility(holder, inventoryCard);
+
+        // Plus button increases quantity.
         holder.buttonPlus.setOnClickListener(v -> {
             int newQuantity = inventoryCard.getQuantity() + 1;
             inventoryCard.setQuantity(newQuantity);
@@ -82,7 +105,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
             Log.d("InventoryAdapter", "Increased quantity to " + newQuantity + " for " + inventoryCard.getCard().getName());
         });
 
-        // Minus button
+        // Minus button decreases quantity if quantity > 0.
         holder.buttonMinus.setOnClickListener(v -> {
             int currentQuantity = inventoryCard.getQuantity();
             if (currentQuantity > 0) {
@@ -94,11 +117,11 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
             }
         });
 
-        // Check button (confirm changes)
+        // Check button to confirm changes.
         holder.buttonCheck.setOnClickListener(v -> {
             int newQuantity = inventoryCard.getQuantity();
             if (newQuantity == 0) {
-                // Remove card via backend call using a request body.
+                // Send a backend call to remove the card.
                 RemoveCardRequest req = new RemoveCardRequest(inventoryCard.getCard().getId());
                 ApiClient.getApiService().removeCard(req).enqueue(new Callback<RemoveCardResponse>() {
                     @Override
@@ -121,14 +144,14 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
                     }
                 });
             } else {
-                // Update quantity via backend call.
+                // Update card quantity via backend call.
                 UpdateQuantityRequest req = new UpdateQuantityRequest(inventoryCard.getCard().getId(), newQuantity);
                 ApiClient.getApiService().updateCardQuantity(req).enqueue(new Callback<UpdateQuantityResponse>() {
                     @Override
                     public void onResponse(Call<UpdateQuantityResponse> call, Response<UpdateQuantityResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                             Toast.makeText(context, "Quantity updated", Toast.LENGTH_SHORT).show();
-                            // Update originalQuantity to reflect confirmed change
+                            // Update originalQuantity to reflect the confirmed change.
                             inventoryCard.setOriginalQuantity(newQuantity);
                             holder.buttonCheck.setVisibility(View.GONE);
                             ((InventoryActivity) context).updateTotalValue();
@@ -136,7 +159,6 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
                             Toast.makeText(context, "Failed to update quantity", Toast.LENGTH_SHORT).show();
                         }
                     }
-
                     @Override
                     public void onFailure(Call<UpdateQuantityResponse> call, Throwable t) {
                         Toast.makeText(context, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -146,7 +168,9 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
         });
     }
 
-
+    /**
+     * Show the check button only if the quantity has changed relative to the original.
+     */
     private void updateCheckVisibility(InventoryViewHolder holder, InventoryCard inventoryCard) {
         if (inventoryCard.getQuantity() == inventoryCard.getOriginalQuantity()) {
             holder.buttonCheck.setVisibility(View.GONE);
@@ -155,7 +179,6 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
             holder.buttonCheck.setEnabled(true);
         }
     }
-
 
     @Override
     public int getItemCount() {
@@ -168,6 +191,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
         TextView textViewCardType;
         TextView textViewQuantity;
         Button buttonPlus, buttonMinus, buttonCheck;
+        ImageButton buttonFavorite;
 
         public InventoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -178,6 +202,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
             buttonPlus = itemView.findViewById(R.id.buttonPlus);
             buttonMinus = itemView.findViewById(R.id.buttonMinus);
             buttonCheck = itemView.findViewById(R.id.buttonCheck);
+            buttonFavorite = itemView.findViewById(R.id.buttonFavorite);
         }
     }
 }

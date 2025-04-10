@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -29,19 +30,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Content Area -->
-    <TextView
-        android:id="@+id/textViewDashboardContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dashboard"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@id/buttonHome"
-        app:layout_constraintBottom_toTopOf="@id/layoutBottomNav"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <!-- Favorite Card ImageView -->
+
 
     <!-- Bottom Navigation Container with two rows -->
+
+    <ImageView
+        android:id="@+id/imageViewFavoriteCard"
+        android:layout_width="352dp"
+        android:layout_height="489dp"
+        android:layout_margin="16dp"
+        android:contentDescription="Favorite Card"
+        android:scaleType="centerCrop"
+        android:src="@drawable/placeholder_card"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.342" />
+
     <LinearLayout
         android:id="@+id/layoutBottomNav"
         android:layout_width="match_parent"
