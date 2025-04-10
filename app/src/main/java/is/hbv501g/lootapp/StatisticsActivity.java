@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,11 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import is.hbv501g.lootapp.api.ApiClient;
 import is.hbv501g.lootapp.models.InventoryCard;
 import is.hbv501g.lootapp.models.api.InventoryResponse;
+import is.hbv501g.lootapp.util.FavoritesManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,6 +32,7 @@ public class StatisticsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FavoritesManager favoritesManager = new FavoritesManager(this);
         setContentView(R.layout.activity_statistics);
 
         // Retrieve views
@@ -36,6 +41,7 @@ public class StatisticsActivity extends AppCompatActivity {
         textViewAverageCost = findViewById(R.id.textViewAverageCost);
         buttonBack = findViewById(R.id.buttonBack);
         buttonHome = findViewById(R.id.buttonHome);
+
 
         // Set click listeners
         buttonBack.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +93,8 @@ public class StatisticsActivity extends AppCompatActivity {
     }
 
     private void computeStatistics(List<InventoryCard> inventory) {
+        FavoritesManager favoritesManager = new FavoritesManager(this);
+        InventoryCard favoriteCard = null; // To store your favorite card
         double totalValue = 0.0;
         int totalCards = 0;
         double maxPrice = 0.0;
@@ -107,11 +115,31 @@ public class StatisticsActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+            if (ic.getCard() != null && favoritesManager.isFavorite(ic.getCard().getId())) {
+                favoriteCard = ic;
+            }
         }
 
         double averageCost = totalCards > 0 ? totalValue / totalCards : 0.0;
         textViewMostExpensive.setText("Most Expensive Card: " + mostExpensiveCardName + " ($" + maxPrice + ")");
         textViewTotalCards.setText("Total Cards: " + totalCards);
         textViewAverageCost.setText("Average Card Cost: $" + String.format("%.2f", averageCost));
+
+        // Update the favorite card UI if a favorite exists.
+        ImageView imageViewFavoriteCard = findViewById(R.id.imageViewFavoriteCard);
+        TextView textViewFavoriteCardName = findViewById(R.id.textViewFavoriteCardName);
+        if (favoriteCard != null && favoriteCard.getCard() != null) {
+            textViewFavoriteCardName.setText("Favorite: " + favoriteCard.getCard().getName());
+            // Load the favorite card's image with Glide
+            Glide.with(this)
+                    .load(favoriteCard.getCard().getImageUrl())
+                    .placeholder(R.drawable.placeholder_card)
+                    .into(imageViewFavoriteCard);
+        } else {
+            // Optionally, clear or set default content if no favorite is found:
+            textViewFavoriteCardName.setText("Favorite: None");
+            imageViewFavoriteCard.setImageResource(R.drawable.placeholder_card);
+        }
     }
+
 }

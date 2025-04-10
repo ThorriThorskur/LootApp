@@ -18,6 +18,7 @@ import is.hbv501g.lootapp.api.ApiClient;
 import is.hbv501g.lootapp.models.api.LoginRequest;
 import is.hbv501g.lootapp.models.api.LoginResponse;
 import is.hbv501g.lootapp.util.SessionManager;
+import is.hbv501g.lootapp.util.ThemePreference;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         sessionManager = SessionManager.getInstance(this);
 
         // Apply dark/light mode before super.onCreate
-        if (sessionManager.isDarkModeEnabled()) {
+        if (ThemePreference.isDarkModeEnabled(this)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

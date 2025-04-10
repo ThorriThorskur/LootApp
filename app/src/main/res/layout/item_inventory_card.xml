@@ -22,13 +22,26 @@
             android:scaleType="centerCrop"
             android:contentDescription="Card Image"/>
 
+        <!-- Star Icon for Favorite -->
+
         <!-- Card Details -->
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
             android:layout_marginStart="16dp">
+
+            <ImageButton
+                android:id="@+id/buttonFavorite"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="4dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="Favorite"
+                android:src="@drawable/ic_star_outline" />
 
             <TextView
                 android:id="@+id/textViewCardName"
