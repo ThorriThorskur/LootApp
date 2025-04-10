@@ -45,6 +45,7 @@ public class DashboardActivity extends AppCompatActivity {
         Button buttonScanner = findViewById(R.id.buttonScanner);
         Button buttonImport = findViewById(R.id.buttonImport);
         Button buttonWishlist = findViewById(R.id.buttonWishlist);
+        Button buttonRuleBook = findViewById(R.id.buttonExtra);
 
         imageViewFavoriteCard = findViewById(R.id.imageViewFavoriteCard);
         favoritesManager = new FavoritesManager(this);
@@ -86,6 +87,13 @@ public class DashboardActivity extends AppCompatActivity {
         buttonImport.setOnClickListener(v -> {
             Intent intent = new Intent(DashboardActivity.this, ImportActivity.class);
             startActivity(intent);
+        });
+        buttonRuleBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this, RuleBookActivity.class);
+                startActivity(intent);
+            }
         });
     }
 

@@ -55,6 +55,10 @@
             android:name=".WishlistActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".RuleBookActivity"
+            android:exported="true" />
+
 
         <activity
             android:name=".LoginActivity"
