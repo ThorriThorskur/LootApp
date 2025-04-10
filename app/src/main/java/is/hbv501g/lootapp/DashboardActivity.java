@@ -23,6 +23,7 @@ public class DashboardActivity extends AppCompatActivity {
         Button buttonInventory = findViewById(R.id.buttonInventory);
         Button buttonScanner = findViewById(R.id.buttonScanner);
         Button buttonImport = findViewById(R.id.buttonImport);
+        Button buttonWishlist = findViewById(R.id.buttonWishlist);
 
         // Home button
         buttonHome.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +59,15 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DashboardActivity.this, InventoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Navigate to Wishlist
+        buttonWishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this, WishlistActivity.class);
                 startActivity(intent);
             }
         });

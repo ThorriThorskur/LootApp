@@ -32,4 +32,15 @@ public interface ApiService {
     @HTTP(method = "DELETE", path = "inventory/remove_card", hasBody = true)
     Call<RemoveCardResponse> removeCard(@Body RemoveCardRequest request);
 
+    @POST("users/refresh_token")
+    Call<RefreshResponse> refreshToken(@Body RefreshRequest request);
+
+    @GET("wishlist")
+    Call<WishlistResponse> getWishlist();
+
+    @POST("wishlist/add_card")
+    Call<AddCardResponse> addCardToWishlist(@Body AddCardRequest request);
+
+
+
 }
