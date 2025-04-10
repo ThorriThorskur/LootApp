@@ -198,9 +198,4 @@ public class InventoryActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(shareIntent, "Share your collection via"));
     }
 
-
-
-
-
-
 }

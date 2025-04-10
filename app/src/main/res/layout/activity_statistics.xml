@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Your summary statistics TextViews -->
+    <!-- Statistics TextViews -->
     <TextView
         android:id="@+id/textViewMostExpensive"
         android:layout_width="0dp"
@@ -57,5 +57,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
+
+    <!-- Favorite Card Display -->
+    <ImageView
+        android:id="@+id/imageViewFavoriteCard"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="Favorite Card"
+        app:layout_constraintTop_toBottomOf="@id/textViewAverageCost"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Optional: TextView to show the favorite card name -->
+    <TextView
+        android:id="@+id/textViewFavoriteCardName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Favorite Card: N/A"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/imageViewFavoriteCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
